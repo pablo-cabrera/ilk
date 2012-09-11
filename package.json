@@ -1,7 +1,7 @@
 {
   "name": "kin",
   "description": "JavaScript class abstraction",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "homepage": "https://github.com/pablo-cabrera/kin-js",
   "author": {
     "name": "Pablo José Cabrera Muñoz",
