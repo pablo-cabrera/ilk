@@ -1,4 +1,5 @@
-#ilk
+ilk [![Build Status](https://travis-ci.org/pablo-cabrera/ilk.png)](https://travis-ci.org/pablo-cabrera/ilk)
+===
 
 A JavaScript type system.
 
