@@ -66,18 +66,6 @@ module.exports = function (grunt) {
                     require.resolve("parts"),
                     "lib/ilk.js",
                     "test/cases/ilk.js"
-                ],
-
-                options: {
-                    config: ".gabarito-dev.rc"
-                }
-            },
-
-            ci: {
-                src: [
-                    require.resolve("parts"),
-                    "lib/ilk.js",
-                    "test/cases/ilk.js"
                 ]
             }
         },
@@ -101,11 +89,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-yuidoc");
-    grunt.loadNpmTasks("grunt-gabarito");
+    // grunt.loadNpmTasks("grunt-gabarito");
     grunt.loadNpmTasks("grunt-jscs");
 
-    grunt.registerTask("default", ["jscs", "jshint", "test:dev"]);
-    grunt.registerTask("ci", ["jscs", "jshint", "test:ci"]);
+    grunt.registerTask("default", ["jscs", "jshint"/*, "test"*/]);
     grunt.registerTask("dist", ["uglify"]);
 
 };
