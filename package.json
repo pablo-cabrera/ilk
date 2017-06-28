@@ -20,11 +20,15 @@
     "parts": "^0.0.1"
   },
   "devDependencies": {
+    "gabarito": "^0.1.0",
     "grunt": "~0.4.0",
+    "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-yuidoc": "^0.7.0",
-    "grunt-jscs": "^1.6.0"
+    "grunt-gabarito": "0.0.6",
+    "grunt-istanbul": "^0.8.0",
+    "grunt-jscs": "^3.0.1"
   },
   "keywords": []
 }

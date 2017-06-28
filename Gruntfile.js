@@ -1,6 +1,30 @@
 module.exports = function (grunt) {
     "use strict";
 
+    (function () {
+        var task = require("grunt-gabarito");
+        var gabarito = require("gabarito");
+        task.instance().registerReporter("istanbul", function (reporter) {
+            var IstanbulReporter = gabarito.plumbing.Reporter.descend().
+            proto({
+                message: function (env, msg, coverage) {
+                    if (msg !== "grunt-istanbul") {
+                        return;
+                    }
+
+                    var json = "coverage-" + env.getName() + ".json";
+
+                    grunt.file.write(
+                        "test/coverage/reports/" + json,
+                        coverage);
+                }
+            });
+
+            return new IstanbulReporter();
+        });
+    }());
+
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
@@ -60,13 +84,28 @@ module.exports = function (grunt) {
             }
         },
 
-        test: {
+        gabarito: {
             dev: {
                 src: [
                     require.resolve("parts"),
                     "lib/ilk.js",
                     "test/cases/ilk.js"
-                ]
+                ],
+                options: {
+                    environments: ["node", "phantom"]
+                }
+            },
+
+            coverage: {
+                src: [
+                    require.resolve("parts"),
+                    "test/coverage/instrument/lib/ilk.js",
+                    "test/cases/ilk.js"
+                ],
+                options: {
+                    environments: ["node", "phantom"],
+                    reporters: ["console", "istanbul"]
+                }
             }
         },
 
@@ -81,6 +120,27 @@ module.exports = function (grunt) {
                     outdir: "docs/"
                 }
             }
+        },
+
+        instrument: {
+            files: "lib/ilk.js",
+            options: {
+                lazy: true,
+                basePath: "test/coverage/instrument/"
+            }
+        },
+
+        makeReport: {
+            src: "test/coverage/reports/**/*.json",
+            options: {
+                type: "lcov",
+                dir: "test/coverage/reports",
+                print: "detail"
+            }
+        },
+
+        clean: {
+            coverage: ["test/coverage"]
         }
 
     });
@@ -89,10 +149,19 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-yuidoc");
-    // grunt.loadNpmTasks("grunt-gabarito");
+    grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks("grunt-gabarito");
+    grunt.loadNpmTasks("grunt-istanbul");
     grunt.loadNpmTasks("grunt-jscs");
 
-    grunt.registerTask("default", ["jscs", "jshint"/*, "test"*/]);
+    grunt.registerTask("default", ["jscs", "jshint", "gabarito:dev"]);
     grunt.registerTask("dist", ["uglify"]);
+
+    grunt.registerTask("coverage", [
+        "clean:coverage",
+        "instrument",
+        "gabarito:coverage",
+        "makeReport"
+    ]);
 
 };
